@@ -2,22 +2,57 @@ import sys
 import json
 from client import StackVM
 
-def main():
-    vm = StackVM()
-    while True:
-        line = sys.stdin.readline()
-        if not line:
-            break
+def handle_rpc(line):
+    try:
         req = json.loads(line)
-        method = req.get("method")
-        params = req.get("params", {})
-        if method == "run":
-            code = [tuple(inst) for inst in params.get("bytecode", [])]
-            res = {"result": vm.run(code)}
+    except Exception:
+        return
+    req_id = req.get("id")
+    method = req.get("method")
+    params = req.get("params", {})
+
+    if method == "initialize":
+        res = {
+            "protocolVersion": "2024-11-05",
+            "serverInfo": {"name": "genpark-stack-bytecode-virtual-machine-skill", "version": "1.0.0"},
+            "capabilities": {"tools": {}}
+        }
+    elif method == "tools/list":
+        res = {
+            "tools": [
+                {
+                    "name": "execute_bytecode",
+                    "description": "Execute stack-based bytecode instructions and return evaluation state",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "bytecode": {"type": "array", "items": {"type": "array"}}
+                        },
+                        "required": ["bytecode"]
+                    }
+                }
+            ]
+        }
+    elif method == "tools/call":
+        tool_name = params.get("name")
+        args = params.get("arguments", {})
+        if tool_name == "execute_bytecode":
+            vm = StackVM()
+            res_data = vm.run(args.get("bytecode", []))
+            res = {"content": [{"type": "text", "text": json.dumps(res_data)}]}
         else:
-            res = {"error": "unknown method"}
-        sys.stdout.write(json.dumps({"id": req.get("id"), "result": res}) + "\n")
-        sys.stdout.flush()
+            res = {"isError": True, "content": [{"type": "text", "text": f"Unknown tool {tool_name}"}]}
+    else:
+        res = {"error": {"code": -32601, "message": "Method not found"}}
+
+    resp = {"jsonrpc": "2.0", "id": req_id, "result": res.get("result", res)}
+    sys.stdout.write(json.dumps(resp) + "\n")
+    sys.stdout.flush()
+
+def main():
+    for line in sys.stdin:
+        if line.strip():
+            handle_rpc(line.strip())
 
 if __name__ == "__main__":
     main()
