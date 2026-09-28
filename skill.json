@@ -1,17 +1,9 @@
 {
+  "schema_version": "v1",
   "name": "genpark-stack-bytecode-virtual-machine-skill",
   "version": "1.0.0",
-  "description": "Stack-based bytecode virtual machine interpreter supporting variable frame environments, arithmetic opcodes, and control flow dispatch.",
-  "main": "client.py",
+  "description": "Stack-based bytecode virtual machine interpreter supporting arithmetic, variable storage, and conditional jumps.",
+  "entrypoint": "client.py",
   "mcp_server": "mcp_server.py",
-  "topics": [
-    "genpark-skill",
-    "agentic-ai",
-    "bytecode-vm",
-    "virtual-machine",
-    "stack-machine",
-    "interpreter",
-    "runtime-system"
-  ],
-  "dependencies": []
+  "category": "Service"
 }
