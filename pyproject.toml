@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genpark-stack-bytecode-virtual-machine-skill"
+version = "1.0.0"
+description = "Stack-based bytecode virtual machine interpreter supporting arithmetic, variable storage, and conditional jumps."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "AlphaPark Team", email = "engineering@alphapark.ai"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Compilers",
+    "Topic :: Software Development :: Interpreters"
+]
+
+[project.urls]
+Homepage = "https://github.com/alphaparkinc/genpark-stack-bytecode-virtual-machine-skill"
+Repository = "https://github.com/alphaparkinc/genpark-stack-bytecode-virtual-machine-skill.git"
+Issues = "https://github.com/alphaparkinc/genpark-stack-bytecode-virtual-machine-skill/issues"
